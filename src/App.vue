@@ -24,39 +24,45 @@
       </div>
     </div>
 
-    <!--todos
-    <ul v-for="(todo, index) in todos" class="list-group list-group-flush">
-      <li class="list-group-item bg-primary">
-        {{ todo
-        }}<button @click="rv(index)" class="btn btn-danger btn-sm">
-          Delete
-        </button>
-      </li>
-    </ul>-->
-
     <!--todos-->
-    <table class="table">
+    <table class="table" v-if="myTodo.todos.length != 0">
       <thead>
         <tr>
           <th scope="col">Index</th>
           <th scope="col">Todo</th>
           <th scope="col">Status</th>
           <th scope="col">Delete</th>
+          <th scope="col">Update</th>
         </tr>
       </thead>
       <tbody v-for="(todo, index) in myTodo.todos">
         <tr>
-          <th scope="row">{{ index }}</th>
+          <th scope="row">{{ index + 1 }}</th>
           <td>{{ todo }}</td>
-          <td @click="changeStatus(index)">{{ myTodo.status }}</td>
+          <td class="status" @click="changeStatus(index)">
+            {{ myTodo.statuses[1] }}
+          </td>
           <td>
             <button @click="rv(index)" class="btn btn-danger btn-sm">
               Delete
             </button>
           </td>
+          <td v-show="(updated = 1)">
+            <button @click="up" class="btn btn-success btn-sm">
+              Update
+            </button>
+          </td>
+          <td v-show="(updated = 0)">
+            <h1>aa</h1>
+          </td>
         </tr>
       </tbody>
     </table>
+
+    <!--alert-->
+    <div class="alert alert-danger" role="alert" v-else>
+      Please add a new task!
+    </div>
   </div>
 </template>
 
@@ -67,9 +73,9 @@ export default {
       myTodo: {
         todo: "",
         todos: [],
-        status: "to-do",
-        index: -1
-      }
+        statuses: ["to-do", "in-progress", "finished"]
+      },
+      updated: 0
     };
   },
 
@@ -78,18 +84,24 @@ export default {
       if (this.myTodo.todo != "") {
         this.myTodo.todos.push(this.myTodo.todo);
         this.myTodo.todo = "";
-        this.myTodo.index += 1;
+        this.myTodo.i += 1;
       }
     },
     rv: function(index) {
       this.myTodo.todos.splice(index, 1);
     },
-    changeStatus: function(index) {
-      if (index === this.myTodo.index) {
-        this.myTodo.status = "finished";
+
+    up: function() {
+      if (this.updated === 0) {
+        this.updated = 1;
+        console.log(this.updated);
+      } else {
+        this.updated = 0;
+        console.log(this.updated);
       }
-      console.log(index);
-      console.log(this.myTodo.index);
+    },
+    changeStatus: function(index) {
+      console.log(this.myTodo.statuses.indexOf("finished"));
     }
   }
 };
@@ -104,5 +116,9 @@ body {
 
 #app {
   width: 50%;
+}
+
+.status {
+  cursor: pointer;
 }
 </style>
