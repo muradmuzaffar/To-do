@@ -39,21 +39,40 @@
         <tr>
           <th scope="row">{{ index + 1 }}</th>
           <td>{{ todo }}</td>
-          <td class="status" @click="changeStatus(index)">
-            {{ myTodo.statuses[1] }}
+          <td>
+            <input class="check" type="checkbox" />
           </td>
           <td>
             <button @click="rv(index)" class="btn btn-danger btn-sm">
               Delete
             </button>
           </td>
-          <td v-show="(updated = 1)">
-            <button @click="up" class="btn btn-success btn-sm">
+
+          <td v-if="updated == 0">
+            <button @click="up(index)" class="btn btn-success btn-sm">
               Update
             </button>
           </td>
-          <td v-show="(updated = 0)">
-            <h1>aa</h1>
+          <td v-else="updated == 1">
+            <div class="input-group mb-3">
+              <input
+                v-model="myTodo.todo"
+                type="text"
+                class="form-control"
+                placeholder="Add to do"
+                aria-label="Recipient's username"
+                aria-describedby="basic-addon2"
+              />
+              <div class="input-group-append">
+                <button
+                  @click="addTodo"
+                  class="btn btn-outline-secondary"
+                  type="button"
+                >
+                  update
+                </button>
+              </div>
+            </div>
           </td>
         </tr>
       </tbody>
@@ -72,8 +91,7 @@ export default {
     return {
       myTodo: {
         todo: "",
-        todos: [],
-        statuses: ["to-do", "in-progress", "finished"]
+        todos: []
       },
       updated: 0
     };
@@ -81,27 +99,13 @@ export default {
 
   methods: {
     addTodo: function() {
-      if (this.myTodo.todo != "") {
+      if (this.myTodo.todo.length != 0) {
         this.myTodo.todos.push(this.myTodo.todo);
         this.myTodo.todo = "";
-        this.myTodo.i += 1;
       }
     },
     rv: function(index) {
       this.myTodo.todos.splice(index, 1);
-    },
-
-    up: function() {
-      if (this.updated === 0) {
-        this.updated = 1;
-        console.log(this.updated);
-      } else {
-        this.updated = 0;
-        console.log(this.updated);
-      }
-    },
-    changeStatus: function(index) {
-      console.log(this.myTodo.statuses.indexOf("finished"));
     }
   }
 };
@@ -120,5 +124,11 @@ body {
 
 .status {
   cursor: pointer;
+}
+
+.check {
+  text-align: center;
+  width: 20px;
+  height: 20px;
 }
 </style>
