@@ -2,6 +2,8 @@
 
 > A Vue.js project
 
+>I wrote to-do app using Vue js. With this app you can add tasks, delete and update them
+
 ## Build Setup
 
 ``` bash
